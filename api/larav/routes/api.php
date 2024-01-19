@@ -3,11 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ScheduleController;
-use App\Http\Controllers\Api\jointController;
-use App\Http\Controllers\Api\locationController;
-use App\Http\Controllers\Api\ownerController;
-use App\Http\Controllers\Api\userController;
-use App\Http\Controllers\Api\reviewController;
+use App\Http\Controllers\Api\JointController;
+use App\Http\Controllers\Api\LocationController;
+use App\Http\Controllers\Api\OwnerController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ReviewController;
 
 
 

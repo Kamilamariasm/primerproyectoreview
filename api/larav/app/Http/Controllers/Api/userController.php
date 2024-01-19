@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\user;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class userController extends Controller
+class UserController extends Controller
 {
     public function list() {
         $users = user::all();

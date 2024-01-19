@@ -15,10 +15,10 @@ class reviewController extends Controller
             foreach($reviews as $review) {
                 $object = [
                 "id"=>$review->id,
-                "joints_id  "=>$review->joints_id,
-                "locations_id" =>$review->locations_id,
-                "schedules_id" =>$review->schedules_id,
-                "owners_id" =>$review->owners_id,
+                "joint_id  "=>$review->joint_id,
+                "location_id" =>$review->location_id,
+                "schedule_id" =>$review->schedule_id,
+                "owner_id" =>$review->owner_id,
                 "image" =>$review->image,
 
                 "created"=>$review->created_at,
@@ -33,10 +33,10 @@ class reviewController extends Controller
               $object =[
     
                 "id"=>$review->id,
-                "joints_id  "=>$review->joints_id,
-                "locations_id" =>$review->locations_id,
-                "schedules_id" =>$review->schedules_id,
-                "owners_id" =>$review->owners_id,
+                "joint_id  "=>$review->joint_id,
+                "location_id" =>$review->location_id,
+                "schedule_id" =>$review->schedule_id,
+                "owner_id" =>$review->owner_id,
                 "image" =>$review->image,
 
                 "created"=>$review->created_at,
