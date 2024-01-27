@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ScheduleController extends Controller
 {
     public function list() {
-        $schedules = schedule::all();
+        $schedules = Schedule::all();
         $list =[];
 
             foreach($schedules as $schedule) {
@@ -25,7 +25,7 @@ class ScheduleController extends Controller
             return response()->json($list);
         }
     public function item($id) {
-        $schedule = schedule::where('id', '=', $id)->first();
+        $schedule = Schedule::where('id', '=', $id)->first();
           $object =[
 
                 "id"=>$schedule->id,
@@ -37,8 +37,38 @@ class ScheduleController extends Controller
         
 
         return response()->json($object);
-            
     }
+        public function create(Request $request) {
+            $data = $request->validate([
+                'day'=> 'required|min:3,max:20',
+                'hour'=> 'required|min:3,max:20'
+            ]);
+            
+            $schedule = Schedule::create([
+                'day'=> $data['day'],
+                'hour'=> $data['hour']
+            ]);
+    
+            if ($schedule) {
+                $object = [
+    
+                    "response" => 'Succes.Item saved correctly.',
+                    "data" => $joint
+        
+                ];
+        
+                return response()->json($object);
+            }else {
+                $object = [
+    
+                    "response" => 'Error:Something went wrong, please try again.',
+        
+                ];
+        
+                return response()->json($object);
+            }
+    
+        }
+            
 }
-
 

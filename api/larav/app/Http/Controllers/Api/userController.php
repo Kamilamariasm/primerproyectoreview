@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function list() {
-        $users = user::all();
+        $users = User::all();
         $list =[];
 
             foreach($users as $user) {
@@ -47,6 +47,47 @@ class UserController extends Controller
             
     
             return response()->json($object);
+        }
+        public function create(Request $request) {
+            $data = $request->validate([
+                'name'=> 'required|min:3,max:20',
+                'surname'=> 'required|min:3,max:20',
+                'mail'=> 'required|min:3,max:20',
+                'phone'=> 'required|min:3,max:20',
+                'password'=> 'required|min:3,max:20',
+                'image'=> 'required|min:3,max:20'
+
+            ]);
+            
+            $user = User::create([
+                'name'=> $data['name'],
+                'surname'=> $data['surname'],
+                'mail'=> $data['mail'],
+                'phone'=> $data['phone'],
+                'password'=> $data['dob'],
+                'dob'=> $data['dob']
+
+
+            ]);
+    
+            if ($user) {
+                $object = [
+    
+                    "response" => 'Succes.Item saved correctly.',
+                    "data" => $joint
+        
+                ];
+        
+                return response()->json($object);
+            }else {
+                $object = [
+    
+                    "response" => 'Error:Something went wrong, please try again.',
+        
+                ];
+        
+                return response()->json($object);
+            }
                 
     }
 }

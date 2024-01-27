@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\location;
+use App\Models\Location;
 use Illuminate\Http\Request;
 
-class locationController extends Controller
+class LocationController extends Controller
 {
     
     public function list() {
-        $locations = location::all();
+        $locations = Location::all();
         $list =[];
 
             foreach($locations as $location) {
@@ -29,7 +29,7 @@ class locationController extends Controller
             return response()->json($list);
         }
     public function item($id) {
-        $location = location::where('id', '=', $id)->first();
+        $location = Location::where('id', '=', $id)->first();
           $object =[
 
             "id"=>$location->id,
@@ -46,4 +46,41 @@ class locationController extends Controller
         return response()->json($object);
             
     }
+
+      public function create(Request $request) {
+                $data = $request->validate([
+                    'neighborhood'=> 'required|min:3,max:20',
+                    'street'=> 'required|min:3,max:20',
+                    'postal'=> 'required|min:3,max:20',
+                    'image'=> 'required|min:3,max:20'
+                ]);
+                
+                $location = Location::create([
+                    'neighborhood'=> $data['neighborhood'],
+                    'street'=> $data['street'],
+                    'postal'=> $data['postal'],
+                    'image'=> $data['image']
+                ]);
+        
+                if ($location) {
+                    $object = [
+        
+                        "response" => 'Succes.Item saved correctly.',
+                        "data" => $joint
+            
+                    ];
+            
+                    return response()->json($object);
+                }else {
+                    $object = [
+        
+                        "response" => 'Error:Something went wrong, please try again.',
+            
+                    ];
+            
+                    return response()->json($object);
+                }
+                
+                
+}
 }
