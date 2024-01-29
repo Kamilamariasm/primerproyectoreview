@@ -236,7 +236,7 @@
     margin-top: -150px;
     -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.21);
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.21);
-    animation: rotateImages 20s infinite linear;
+    animation: rotateImages 7s infinite linear;
   }
   @keyframes rotateImages {
     0% { background-image: url(../images/1.png); }
@@ -401,7 +401,7 @@
   
   .contact_section {
     color: #fff;
-    background: url(../images/son.png);
+    background: url(../images/ca22.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;

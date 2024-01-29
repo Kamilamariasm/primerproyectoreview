@@ -80,7 +80,48 @@ class LocationController extends Controller
             
                     return response()->json($object);
                 }
+            }
+            public function update(Request $request) {
+
+
+                $data >request->validate([
+
+                    'id'=> 'required|inteher|min:1',
+                    'neighborhood'=> 'required|inteher|min:1',
+                    'street'=> 'required|min:3,max:20',
+                    'postal'=> 'required|min:3,max:20',
+                    'image'=> 'required|min:3,max:20'
+                ]);
+                $location = Location::where('id', '=', $id)->first();
+
+                $location->neighborhood = $data['neighborhood'];
+                $location->street = $data['street'];
+                $location->postal = $data['postal'];
+                $location->image = $data['image'];
+                
+                if ($location) {
+                    $object = [
+        
+                        "response" => 'Succes.Item updated successfully.',
+                        "data" => $location
+            
+                    ];
+            
+                    return response()->json($object);
+                }else {
+                    $object = [
+        
+                        "response" => 'Error: Something went wrong, please try again.',
+            
+                    ];
+            
+                    return response()->json($object);
+        
+        
+            }
+    }
+}
+
                 
                 
-}
-}
+

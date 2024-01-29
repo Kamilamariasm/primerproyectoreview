@@ -90,4 +90,51 @@ class UserController extends Controller
             }
                 
     }
+    public function update(Request $request) {
+
+
+        $data >request->validate([
+
+            'id'=> 'required|inteher|min:1',
+            'name'=> 'required|min:3,max:20',
+            'surname'=> 'required|min:3,max:20',
+            'mail'=> 'required|min:3,max:20',
+            'phone'=> 'required|min:3,max:20',
+            'password'=> 'required|min:3,max:20',
+            'dob'=> 'required|min:3,max:20'
+
+
+        ]);
+        $user = Joint::where('id', '=', $id)->first();
+
+        $user->name = $data['name'];
+        $user->surname = $data['surname'];
+        $user->mail = $data['mail'];
+        $user->phone = $data['phone'];
+        $user->password = $data['password'];
+        $user->dob = $data['dob'];
+        
+        
+        if ($user) {
+            $object = [
+
+                "response" => 'Succes.Item updated successfully.',
+                "data" => $user
+    
+            ];
+    
+            return response()->json($object);
+        }else {
+            $object = [
+
+                "response" => 'Error: Something went wrong, please try again.',
+    
+            ];
+    
+            return response()->json($object);
+
+
+        }
+    }
 }
+

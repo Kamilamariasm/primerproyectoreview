@@ -86,5 +86,50 @@ class ReviewController extends Controller
         }
             
 }
+public function update(Request $request) {
+
+
+    $data >request->validate([
+
+        'id'=> 'required|inteher|min:1',
+        'joint_id'=> 'required|min:3,max:20',
+        'location_id'=> 'required|min:3,max:20',
+        'schedule_id'=> 'required|min:3,max:20',
+        'owner_id'=> 'required|min:3,max:20',
+        'image'=> 'required|min:3,max:20'
+
+    ]);
+    $review = Review::where('id', '=', $id)->first();
+
+    $review->joint_id = $data['joint_id'];
+    $review->location_id = $data['location_id'];
+    $review->schedule_id = $data['schedule_id'];
+    $review->owner_id = $data['owner_id'];
+    $review->image = $data['image'];
+
+    
+    if ($review) {
+        $object = [
+
+            "response" => 'Succes.Item updated successfully.',
+            "data" => $review
+
+        ];
+
+        return response()->json($object);
+    }else {
+        $object = [
+
+            "response" => 'Error: Something went wrong, please try again.',
+
+        ];
+
+        return response()->json($object);
+
+
 }
+}
+}
+
+
 

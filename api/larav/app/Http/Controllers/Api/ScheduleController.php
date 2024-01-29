@@ -70,5 +70,42 @@ class ScheduleController extends Controller
     
         }
             
+        public function update(Request $request) {
+
+
+            $data >request->validate([
+
+                'id'=> 'required|inteher|min:1',
+                'day'=> 'required|min:3,max:20',
+                'hour'=> 'required|min:3,max:20'
+            ]);
+            $schedule = Schedule::where('id', '=', $id)->first();
+
+            $schedule->day = $data['day'];
+            $schedule->hour = $data['hour'];
+            
+            
+            if ($schedule) {
+                $object = [
+    
+                    "response" => 'Succes.Item updated successfully.',
+                    "data" => $joint
+        
+                ];
+        
+                return response()->json($object);
+            }else {
+                $object = [
+    
+                    "response" => 'Error: Something went wrong, please try again.',
+        
+                ];
+        
+                return response()->json($object);
+    
+    
+        }
 }
+}
+
 
