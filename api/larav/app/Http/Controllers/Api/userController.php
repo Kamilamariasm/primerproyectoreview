@@ -93,7 +93,7 @@ class UserController extends Controller
     public function update(Request $request) {
 
 
-        $data >request->validate([
+        $data >$request->validate([
 
             'id'=> 'required|inteher|min:1',
             'name'=> 'required|min:3,max:20',
@@ -105,7 +105,7 @@ class UserController extends Controller
 
 
         ]);
-        $user = Joint::where('id', '=', $id)->first();
+        $user = Joint::where('id', '=', $data['id'])->first();
 
         $user->name = $data['name'];
         $user->surname = $data['surname'];
@@ -115,7 +115,7 @@ class UserController extends Controller
         $user->dob = $data['dob'];
         
         
-        if ($user) {
+        if ($user->save()) {
             $object = [
 
                 "response" => 'Succes.Item updated successfully.',

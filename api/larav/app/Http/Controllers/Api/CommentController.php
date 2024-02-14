@@ -3,41 +3,38 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Joint;
 use Illuminate\Http\Request;
+use App\Models\Comment;
 
+class CommentController extends Controller
 
-class JointController extends Controller
 {
     public function list() {
-        $joints = Joint::all();
+        $comments = Comment::all();
         $list =[];
 
-            foreach($joints as $joint) {
+            foreach($comments as $comment) {
                 $object = [
-                "id"=>$joint->id,
-                "stand"=>$joint->stand,
-                "consumption" =>$joint->consumption,
-                "profiles" =>$joint->profiles,
+                "id"=>$comment->id,
+                "opinion"=>$comment->opinion,
+                "user_id" =>$comment->user_id,
+            
 
-                "created"=>$joint->created_at,
-                "updated"=>$joint->updated_at
+                "created"=>$comment->created_at,
+                "updated"=>$comment->updated_at
                 ];
                 array_push($list, $object);
             }
             return response()->json($list);
         }
         public function item($id) {
-            $joint = Joint::where('id', '=', $id)->first();
+            $comment = Comment::where('id', '=', $id)->first();
               $object =[
     
-                "id"=>$joint->id,
-                "stand"=>$joint->stand,
-                "consumption" =>$joint->consumption,
-                "profiles" =>$joint->profiles,
-
-                "created"=>$joint->created_at,
-                "updated"=>$joint->updated_at
+                "id"=>$comment->id,
+                "opinion"=>$comment->opinion,
+                "user_id" =>$comment->user_id
+                
                 ];           
             
     
@@ -45,18 +42,16 @@ class JointController extends Controller
         }
             public function create(Request $request) {
                 $data = $request->validate([
-                    'stand'=> 'required|min:3,max:20',
-                    'consumption'=> 'required|min:3,max:20',
-                    'profiles'=> 'required|min:3,max:20'
+                    'opinion'=> 'required|min:3,max:20',
+                    'user_id'=> 'required|min:3,max:20'
                 ]);
                 
-                $joint = Joint::create([
-                    'stand'=> $data['stand'],
-                    'consumption'=> $data['consumption'],
-                    'profiles'=> $data['profiles']
+                $comment = Comment::create([
+                    'opinion'=> $data['opinion'],
+                    'user_id'=> $data['user_id']
                 ]);
         
-                if ($joint) {
+                if ($comment) {
                     $object = [
         
                         "response" => 'Succes.Item saved correctly.',
@@ -78,24 +73,23 @@ class JointController extends Controller
                 public function update(Request $request) {
 
 
-                    $data = $request->validate([
+                    $data >$request->validate([
 
-                        'id'=> 'required|integer|min:1',
-                        'stand'=> 'required|min:3,max:20',
-                        'consumption'=> 'required|min:3,max:20',
-                        'profiles'=> 'required|min:3,max:20'
+                        'id'=> 'required|inteher|min:1',
+                        'opinion'=> 'required|min:3,max:20',
+                        'user_id'=> 'required|min:3,max:20'
                     ]);
-                    $joint = Joint::where('id', '=', $data['id'])->first();
+                    $comment = Comment::where('id', '=', $data['id'])->first();
 
-                    $joint->stand = $data['stand'];
-                    $joint->consumption = $data['consumption'];
-                    $joint->profiles = $data['profiles'];
+                    $comment->opinion = $data['opinion'];
+                    $comment->user_id = $data['user_id'];
+                  
                     
-                    if ($joint->save()) {
+                    if ($comment->save()) {
                         $object = [
             
                             "response" => 'Succes.Item updated successfully.',
-                            "data" => $joint
+                            "data" => $comment
                 
                         ];
                 
@@ -113,3 +107,4 @@ class JointController extends Controller
                 }
         }
     }
+

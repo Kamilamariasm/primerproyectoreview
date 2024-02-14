@@ -73,19 +73,19 @@ class ScheduleController extends Controller
         public function update(Request $request) {
 
 
-            $data >request->validate([
+            $data >$request->validate([
 
                 'id'=> 'required|inteher|min:1',
                 'day'=> 'required|min:3,max:20',
                 'hour'=> 'required|min:3,max:20'
             ]);
-            $schedule = Schedule::where('id', '=', $id)->first();
+            $schedule = Schedule::where('id', '=', $data['id'])->first();
 
             $schedule->day = $data['day'];
             $schedule->hour = $data['hour'];
             
             
-            if ($schedule) {
+            if ($schedule->save()) {
                 $object = [
     
                     "response" => 'Succes.Item updated successfully.',

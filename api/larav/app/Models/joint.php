@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Joint extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['stand', 'consumption', 'profiles'];
 }

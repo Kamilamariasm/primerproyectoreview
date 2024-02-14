@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Owner extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name','surname','mail','phone','dob'];
 }

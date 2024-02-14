@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ScheduleController extends Controller
+class LocationController extends Controller
 {
     public function index() {
-        return view('Schedules.Schedules');
+        return view('Locations.Locations');
     }
 }

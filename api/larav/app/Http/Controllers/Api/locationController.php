@@ -84,7 +84,7 @@ class LocationController extends Controller
             public function update(Request $request) {
 
 
-                $data >request->validate([
+                $data >$request->validate([
 
                     'id'=> 'required|inteher|min:1',
                     'neighborhood'=> 'required|inteher|min:1',
@@ -92,14 +92,14 @@ class LocationController extends Controller
                     'postal'=> 'required|min:3,max:20',
                     'image'=> 'required|min:3,max:20'
                 ]);
-                $location = Location::where('id', '=', $id)->first();
+                $location = Location::where('id', '=', $data['id'])->first();
 
                 $location->neighborhood = $data['neighborhood'];
                 $location->street = $data['street'];
                 $location->postal = $data['postal'];
                 $location->image = $data['image'];
                 
-                if ($location) {
+                if ($location->save()) {
                     $object = [
         
                         "response" => 'Succes.Item updated successfully.',

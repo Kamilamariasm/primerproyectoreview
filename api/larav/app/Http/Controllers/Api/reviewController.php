@@ -89,7 +89,7 @@ class ReviewController extends Controller
 public function update(Request $request) {
 
 
-    $data >request->validate([
+    $data >$request->validate([
 
         'id'=> 'required|inteher|min:1',
         'joint_id'=> 'required|min:3,max:20',
@@ -99,7 +99,7 @@ public function update(Request $request) {
         'image'=> 'required|min:3,max:20'
 
     ]);
-    $review = Review::where('id', '=', $id)->first();
+    $review = Review::where('id', '=', $data['id'])->first();
 
     $review->joint_id = $data['joint_id'];
     $review->location_id = $data['location_id'];
@@ -108,7 +108,7 @@ public function update(Request $request) {
     $review->image = $data['image'];
 
     
-    if ($review) {
+    if ($review->save()) {
         $object = [
 
             "response" => 'Succes.Item updated successfully.',

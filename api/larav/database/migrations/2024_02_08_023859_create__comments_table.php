@@ -13,19 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('_comments', function (Blueprint $table) {
             $table->id();
-            $table->integer('schedules_id');
-            $table->integer('locations_id');
-            $table->integer('joints_id');
-            $table->integer('owners_id');
+            $table->string('opinion');
             $table->integer('users_id');
-
-            $table->string('image')->default('postholder.png');
             $table->timestamps();
+
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('_comments');
     }
 };
