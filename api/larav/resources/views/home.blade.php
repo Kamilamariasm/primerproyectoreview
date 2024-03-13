@@ -120,8 +120,8 @@
         </div>
         <div class="detail-2">
           <p>
-          Embárcate en un viaje donde se captura la esencia de cada experiencia. 
-          Desde íntimos refugios hasta modernos escenarios. te invitamos a una exploración celestial para descubrir el encanto único de cada lugar
+ Embárcate en un viaje donde se captura la esencia de cada experiencia. 
+          Desde íntimos refugios hasta modernos escenarios. te invitamos a una exploración celestial para descubrir el encanto único de cada lugar         
 
           </p>
         </div>

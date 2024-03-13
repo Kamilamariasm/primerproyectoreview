@@ -15,7 +15,7 @@ class ReviewController extends Controller
             foreach($reviews as $review) {
                 $object = [
                 "id"=>$review->id,
-                "joint_id  "=>$review->joint_id,
+                "joint_id"=>$review->joint_id,
                 "location_id" =>$review->location_id,
                 "schedule_id" =>$review->schedule_id,
                 "owner_id" =>$review->owner_id,

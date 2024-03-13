@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\JointController;
 use App\Http\Controllers\Api\LocationController;
-use App\Http\Controllers\Api\OwnerController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\CommentController;
@@ -49,11 +48,6 @@ Route::post('/locations{id}/update',[LocationsController::class, 'update']);
 
 
 
-Route::get('/owners',[OwnerController::class, 'list']);
-Route::get('/owners/{id}',[OwnerController::class, 'item']);
-Route::post('/owners/create',[OwnerController::class, 'create']);
-Route::post('/owners{id}/update',[OwnersController::class, 'update']);
-
 
 Route::get('/users',[UserController::class, 'list']);
 Route::get('/users/{id}',[UserController::class, 'item']);
@@ -70,3 +64,4 @@ Route::get('/comments',[CommentController::class, 'list']);
 Route::get('/comments/{id}',[CommentController::class, 'item']);
 Route::post('/comments/create',[CommentController::class, 'create']);
 Route::post('/comments{id}/update',[CommentController::class, 'update']);
+

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -17,7 +18,7 @@ class UserController extends Controller
                 "id"=>$user->id,
                 "name"=>$user->name,
                 "surname" =>$user->surname,
-                "mail" =>$user->mail,
+                "email" =>$user->email,
                 "phone" =>$user->phone,
                 "password" =>$user->password,
                 "image" =>$user->image,
@@ -30,13 +31,13 @@ class UserController extends Controller
             return response()->json($list);
         }
         public function item($id) {
-            $user = user::where('id', '=', $id)->first();
+            $user = User::where('id', '=', $id)->first();
               $object =[
     
                 "id"=>$user->id,
                 "name"=>$user->name,
                 "surname" =>$user->surname,
-                "mail" =>$user->mail,
+                "email" =>$user->email,
                 "phone" =>$user->phone,
                 "password" =>$user->password,
                 "image" =>$user->image,
@@ -52,7 +53,7 @@ class UserController extends Controller
             $data = $request->validate([
                 'name'=> 'required|min:3,max:20',
                 'surname'=> 'required|min:3,max:20',
-                'mail'=> 'required|min:3,max:20',
+                'email'=> 'required|min:3,max:20',
                 'phone'=> 'required|min:3,max:20',
                 'password'=> 'required|min:3,max:20',
                 'image'=> 'required|min:3,max:20'
@@ -62,19 +63,17 @@ class UserController extends Controller
             $user = User::create([
                 'name'=> $data['name'],
                 'surname'=> $data['surname'],
-                'mail'=> $data['mail'],
+                'email'=> $data['email'],
                 'phone'=> $data['phone'],
-                'password'=> $data['dob'],
-                'dob'=> $data['dob']
-
-
+                'password'=> hash::make($data['password']),
+                'image'=> $data['image']
             ]);
     
             if ($user) {
                 $object = [
     
                     "response" => 'Succes.Item saved correctly.',
-                    "data" => $joint
+                    "data" => $user
         
                 ];
         
@@ -98,21 +97,21 @@ class UserController extends Controller
             'id'=> 'required|inteher|min:1',
             'name'=> 'required|min:3,max:20',
             'surname'=> 'required|min:3,max:20',
-            'mail'=> 'required|min:3,max:20',
+            'email'=> 'required|min:3,max:20',
             'phone'=> 'required|min:3,max:20',
             'password'=> 'required|min:3,max:20',
-            'dob'=> 'required|min:3,max:20'
+            'image'=> 'required|min:3,max:20'
 
 
         ]);
-        $user = Joint::where('id', '=', $data['id'])->first();
+        $user = User::where('id', '=', $data['id'])->first();
 
         $user->name = $data['name'];
         $user->surname = $data['surname'];
-        $user->mail = $data['mail'];
+        $user->email = $data['email'];
         $user->phone = $data['phone'];
         $user->password = $data['password'];
-        $user->dob = $data['dob'];
+        $user->image = $data['image'];
         
         
         if ($user->save()) {
