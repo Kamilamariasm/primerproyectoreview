@@ -37,14 +37,14 @@ Route::post('/schedules/{id}/update',[ScheduleController::class, 'update']);
 Route::get('/joints',[JointController::class, 'list']);
 Route::get('/joints/{id}',[JointController::class, 'item']);
 Route::post('/joints/create',[JointController::class, 'create']);
-Route::post('/joints/{id}/update',[JointsController::class, 'update']);
+Route::post('/joints/{id}/update',[JointController::class, 'update']);
 
 
 
 Route::get('/locations',[LocationController::class, 'list']);
 Route::get('/locations/{id}',[LocationController::class, 'item']);
 Route::post('/locations/create',[LocationController::class, 'create']);
-Route::post('/locations/{id}/update',[LocationsController::class, 'update']);
+Route::post('/locations/{id}/update',[LocationController::class, 'update']);
 
 
 
@@ -52,13 +52,13 @@ Route::post('/locations/{id}/update',[LocationsController::class, 'update']);
 Route::get('/users',[UserController::class, 'list']);
 Route::get('/users/{id}',[UserController::class, 'item']);
 Route::post('/users/create',[UserController::class, 'create']);
-Route::post('/users/{id}/update',[UsersController::class, 'update']);
+Route::post('/users/{id}/update', [UserController::class, 'update']);
 
 
 Route::get('/reviews',[ReviewController::class, 'list']);
 Route::get('/reviews/{id}',[ReviewController::class, 'item']);
 Route::post('/reviews/create',[ReviewController::class, 'create']);
-Route::post('/reviews/{id}/update',[ReviewsController::class, 'update']);
+Route::post('/reviews/{id}/update',[ReviewController::class, 'update']);
 
 Route::get('/comments',[CommentController::class, 'list']);
 Route::get('/comments/{id}',[CommentController::class, 'item']);
