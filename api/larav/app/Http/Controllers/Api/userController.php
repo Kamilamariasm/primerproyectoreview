@@ -6,71 +6,88 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function list() {
+    public function list()
+    {
         $users = User::all();
         $list = [];
 
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $object = [
-                "id"=>$user->id,
-                "name"=>$user->name,
-                "surname"=>$user->surname,
-                "email"=>$user->email,
-                "phone"=>$user->phone,
-                "image"=>$user->image,
-                "created"=>$user->created_at,
-                "updated"=>$user->updated_at
+                "id" => $user->id,
+                "name" => $user->name,
+                "surname" => $user->surname,
+                "email" => $user->email,
+                "phone" => $user->phone,
+                "image" => $user->image,
+                "created" => $user->created_at,
+                "updated" => $user->updated_at
             ];
             array_push($list, $object);
         }
         return response()->json($list);
     }
 
-    public function item($id) {
+    public function item($id)
+    {
         $user = User::where('id', '=', $id)->first();
         $object = [
-            "id"=>$user->id,
-            "name"=>$user->name,
-            "surname"=>$user->surname,
-            "email"=>$user->email,
-            "phone"=>$user->phone,
-            "image"=>$user->image,
-            "created"=>$user->created_at,
-            "updated"=>$user->updated_at
+            "id" => $user->id,
+            "name" => $user->name,
+            "surname" => $user->surname,
+            "email" => $user->email,
+            "phone" => $user->phone,
+            "image" => $user->image,
+            "created" => $user->created_at,
+            "updated" => $user->updated_at
         ];
 
         return response()->json($object);
     }
-
-    public function create(Request $request) {
-        $data = $request->validate([
-            'name'=> 'required|min:3,max:20',
-            'surname'=> 'required|min:3,max:20',
-            'email'=> 'required|min:3,max:20',
-            'phone'=> 'required|min:3,max:20',
-            'password'=> 'required|min:3,max:20',
-            'image'=> 'required|min:3,max:20'
+    public function create(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3|max:20',
+            'surname' => 'required|min:3|max:20',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|min:3|max:20',
+            'password' => 'required|min:3|max:20',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Ajusta las reglas de validación según tus necesidades
         ]);
-
-        // Procesamiento de la imagen
-        $imageData = base64_decode($data['image']);
-        $imageName = 'user_' . time() . '.png'; // Genera un nombre único para la imagen
-        $path = public_path('images/users/' . $imageName);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error en la validación de los datos',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+    
+        // Verificar si el directorio de imágenes de usuarios existe y crearlo si no existe
+        $directory = public_path('images/users/');
+        if (!File::isDirectory($directory)) {
+            File::makeDirectory($directory, 0777, true, true);
+        }
+    
+        // Procesamiento de la imagen y creación del usuario
+        $imageData = base64_decode($request->image);
+        $imageName = 'user_' . time() . '.png';
+        $path = $directory . $imageName;
         file_put_contents($path, $imageData);
-
-        // Creación del usuario con la ruta de la imagen
+    
         $user = User::create([
-            'name'=> $data['name'],
-            'surname'=> $data['surname'],
-            'email'=> $data['email'],
-            'phone'=> $data['phone'],
-            'password'=> Hash::make($data['password']),
-            'image'=> $path // Guarda la ruta de la imagen en la base de datos
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'image' => $path,
         ]);
-
+    
         if ($user) {
             return response()->json([
                 "success" => true,
@@ -84,19 +101,41 @@ class UserController extends Controller
             ], 500);
         }
     }
+    
 
-    public function update(Request $request) {
-        $data = $request->validate([
-            'id'=> 'required|integer|min:1',
-            'name'=> 'required|min:3,max:20',
-            'surname'=> 'required|min:3,max:20',
-            'email'=> 'required|min:3,max:20',
-            'phone'=> 'required|min:3,max:20',
-            'password'=> 'required|min:3,max:20',
-            'image'=> 'required|min:3,max:20'
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|integer|min:1',
+            'name' => 'required|min:3|max:20',
+            'surname' => 'required|min:3|max:20',
+            'email' => 'required|email',
+            'phone' => 'required|min:3|max:20',
+            'password' => 'required|min:3|max:20',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Ajusta las reglas de validación según tus necesidades
         ]);
 
-        $user = User::find($data['id']);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error en la validación de los datos',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Verificar si el directorio de imágenes de usuarios existe y crearlo si no existe
+        $directory = public_path('images/users/');
+        if (!File::isDirectory($directory)) {
+            File::makeDirectory($directory, 0777, true, true);
+        }
+
+        // Procesamiento de la imagen y actualización del usuario
+        $imageData = base64_decode($request->image);
+        $imageName = 'user_' . time() . '.png';
+        $path = $directory . $imageName;
+        file_put_contents($path, $imageData);
+
+        $user = User::find($request->id);
 
         if (!$user) {
             return response()->json([
@@ -105,18 +144,11 @@ class UserController extends Controller
             ], 404);
         }
 
-        // Procesamiento de la imagen
-        $imageData = base64_decode($data['image']);
-        $imageName = 'user_' . time() . '.png'; // Genera un nombre único para la imagen
-        $path = public_path('images/users/' . $imageName);
-        file_put_contents($path, $imageData);
-
-        // Actualización de los datos del usuario
-        $user->name = $data['name'];
-        $user->surname = $data['surname'];
-        $user->email = $data['email'];
-        $user->phone = $data['phone'];
-        $user->password = Hash::make($data['password']);
+        $user->name = $request->name;
+        $user->surname = $request->surname;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->password = Hash::make($request->password);
         $user->image = $path;
 
         if ($user->save()) {
