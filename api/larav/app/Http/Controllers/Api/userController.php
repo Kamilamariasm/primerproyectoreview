@@ -11,129 +11,125 @@ class UserController extends Controller
 {
     public function list() {
         $users = User::all();
-        $list =[];
+        $list = [];
 
-            foreach($users as $user) {
-                $object = [
+        foreach($users as $user) {
+            $object = [
                 "id"=>$user->id,
                 "name"=>$user->name,
-                "surname" =>$user->surname,
-                "email" =>$user->email,
-                "phone" =>$user->phone,
-                "password" =>$user->password,
-                "image" =>$user->image,
-
+                "surname"=>$user->surname,
+                "email"=>$user->email,
+                "phone"=>$user->phone,
+                "image"=>$user->image,
                 "created"=>$user->created_at,
                 "updated"=>$user->updated_at
-                ];
-                array_push($list, $object);
-            }
-            return response()->json($list);
+            ];
+            array_push($list, $object);
         }
-        public function item($id) {
-            $user = User::where('id', '=', $id)->first();
-              $object =[
-    
-                "id"=>$user->id,
-                "name"=>$user->name,
-                "surname" =>$user->surname,
-                "email" =>$user->email,
-                "phone" =>$user->phone,
-                "password" =>$user->password,
-                "image" =>$user->image,
-
-                "created"=>$user->created_at,
-                "updated"=>$user->updated_at
-                ];           
-            
-    
-            return response()->json($object);
-        }
-        public function create(Request $request) {
-            $data = $request->validate([
-                'name'=> 'required|min:3,max:20',
-                'surname'=> 'required|min:3,max:20',
-                'email'=> 'required|min:3,max:20',
-                'phone'=> 'required|min:3,max:20',
-                'password'=> 'required|min:3,max:20',
-                'image'=> 'required|min:3,max:20'
-
-            ]);
-            
-            $user = User::create([
-                'name'=> $data['name'],
-                'surname'=> $data['surname'],
-                'email'=> $data['email'],
-                'phone'=> $data['phone'],
-                'password'=> hash::make($data['password']),
-                'image'=> $data['image']
-            ]);
-    
-            if ($user) {
-                $object = [
-    
-                    "response" => 'Succes.Item saved correctly.',
-                    "data" => $user
-        
-                ];
-        
-                return response()->json($object);
-            }else {
-                $object = [
-    
-                    "response" => 'Error:Something went wrong, please try again.',
-        
-                ];
-        
-                return response()->json($object);
-            }
-                
+        return response()->json($list);
     }
-    public function update(Request $request) {
 
+    public function item($id) {
+        $user = User::where('id', '=', $id)->first();
+        $object = [
+            "id"=>$user->id,
+            "name"=>$user->name,
+            "surname"=>$user->surname,
+            "email"=>$user->email,
+            "phone"=>$user->phone,
+            "image"=>$user->image,
+            "created"=>$user->created_at,
+            "updated"=>$user->updated_at
+        ];
 
-        $data >$request->validate([
+        return response()->json($object);
+    }
 
-            'id'=> 'required|inteher|min:1',
+    public function create(Request $request) {
+        $data = $request->validate([
             'name'=> 'required|min:3,max:20',
             'surname'=> 'required|min:3,max:20',
             'email'=> 'required|min:3,max:20',
             'phone'=> 'required|min:3,max:20',
             'password'=> 'required|min:3,max:20',
             'image'=> 'required|min:3,max:20'
-
-
         ]);
-        $user = User::where('id', '=', $data['id'])->first();
 
+        // Procesamiento de la imagen
+        $imageData = base64_decode($data['image']);
+        $imageName = 'user_' . time() . '.png'; // Genera un nombre único para la imagen
+        $path = public_path('images/users/' . $imageName);
+        file_put_contents($path, $imageData);
+
+        // Creación del usuario con la ruta de la imagen
+        $user = User::create([
+            'name'=> $data['name'],
+            'surname'=> $data['surname'],
+            'email'=> $data['email'],
+            'phone'=> $data['phone'],
+            'password'=> Hash::make($data['password']),
+            'image'=> $path // Guarda la ruta de la imagen en la base de datos
+        ]);
+
+        if ($user) {
+            return response()->json([
+                "success" => true,
+                "message" => "Usuario creado correctamente",
+                "data" => $user
+            ]);
+        } else {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al crear el usuario"
+            ], 500);
+        }
+    }
+
+    public function update(Request $request) {
+        $data = $request->validate([
+            'id'=> 'required|integer|min:1',
+            'name'=> 'required|min:3,max:20',
+            'surname'=> 'required|min:3,max:20',
+            'email'=> 'required|min:3,max:20',
+            'phone'=> 'required|min:3,max:20',
+            'password'=> 'required|min:3,max:20',
+            'image'=> 'required|min:3,max:20'
+        ]);
+
+        $user = User::find($data['id']);
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Usuario no encontrado"
+            ], 404);
+        }
+
+        // Procesamiento de la imagen
+        $imageData = base64_decode($data['image']);
+        $imageName = 'user_' . time() . '.png'; // Genera un nombre único para la imagen
+        $path = public_path('images/users/' . $imageName);
+        file_put_contents($path, $imageData);
+
+        // Actualización de los datos del usuario
         $user->name = $data['name'];
         $user->surname = $data['surname'];
         $user->email = $data['email'];
         $user->phone = $data['phone'];
-        $user->password = $data['password'];
-        $user->image = $data['image'];
-        
-        
+        $user->password = Hash::make($data['password']);
+        $user->image = $path;
+
         if ($user->save()) {
-            $object = [
-
-                "response" => 'Succes.Item updated successfully.',
+            return response()->json([
+                "success" => true,
+                "message" => "Usuario actualizado correctamente",
                 "data" => $user
-    
-            ];
-    
-            return response()->json($object);
-        }else {
-            $object = [
-
-                "response" => 'Error: Something went wrong, please try again.',
-    
-            ];
-    
-            return response()->json($object);
-
-
+            ]);
+        } else {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al actualizar el usuario"
+            ], 500);
         }
     }
 }
-

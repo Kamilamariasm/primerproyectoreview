@@ -91,7 +91,7 @@ class JointController extends Controller
                     $joint->consumption = $data['consumption'];
                     $joint->profiles = $data['profiles'];
                     
-                    if ($joint->save()) {
+                    if ($joint->update()) {
                         $object = [
             
                             "response" => 'Succes.Item updated successfully.',

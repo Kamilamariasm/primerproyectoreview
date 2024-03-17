@@ -53,7 +53,7 @@ class ScheduleController extends Controller
                 $object = [
     
                     "response" => 'Succes.Item saved correctly.',
-                    "data" => $joint
+                    "data" => $schedule
         
                 ];
         
@@ -73,23 +73,22 @@ class ScheduleController extends Controller
         public function update(Request $request) {
 
 
-            $data >$request->validate([
+            $data = $request->validate([
 
-                'id'=> 'required|inteher|min:1',
+                'id'=> 'required|integer',
                 'day'=> 'required|min:3,max:20',
                 'hour'=> 'required|min:3,max:20'
             ]);
-            $schedule = Schedule::where('id', '=', $data['id'])->first();
-
-            $schedule->day = $data['day'];
-            $schedule->hour = $data['hour'];
+            $schedule = Schedule::where("id","=", $data['id'])->first();
+            $schedule->day=$data['day'];
+            $schedule->hour=$data['hour'];
             
             
-            if ($schedule->save()) {
-                $object = [
+            if($schedule->update()){
+                $object =[
     
-                    "response" => 'Succes.Item updated successfully.',
-                    "data" => $joint
+                    "response"=>'Succes.Item updated successfully.',
+                    "data" => $schedule
         
                 ];
         
@@ -105,7 +104,7 @@ class ScheduleController extends Controller
     
     
         }
-}
+    }
 }
 
 

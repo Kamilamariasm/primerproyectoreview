@@ -15,10 +15,10 @@ class ReviewController extends Controller
             foreach($reviews as $review) {
                 $object = [
                 "id"=>$review->id,
-                "joint_id"=>$review->joint_id,
-                "location_id" =>$review->location_id,
-                "schedule_id" =>$review->schedule_id,
-                "owner_id" =>$review->owner_id,
+                "joint"=>$review->joint,
+                "location" =>$review->location,
+                "schedule" =>$review->schedule,
+                "comment" =>$review->comment,
                 "image" =>$review->image,
 
                 "created"=>$review->created_at,
@@ -34,10 +34,9 @@ class ReviewController extends Controller
           $object =[
 
             "id"=>$review->id,
-            "joint_id"=>$review->joint_id,
-            "location_id" =>$review->location_id,
-            "schedule_id" =>$review->schedule_id,
-            "owner_id" =>$review->owner_id,
+            "joint_id"=>$review->joint,
+            "location_id" =>$review->location,
+            "schedule_id" =>$review->schedule,
             "image" =>$review->image,
 
             "created"=>$review->created_at,
@@ -52,16 +51,14 @@ class ReviewController extends Controller
             'joint_id'=> 'required|min:3,max:20',
             'location_id'=> 'required|min:3,max:20',
             'schedule_id'=> 'required|min:3,max:20',
-            'owner_id'=> 'required|min:3,max:20',
             'image'=> 'required|min:3,max:20'
 
         ]);
         
         $review = Review::create([
-            'joint_id'=> $data['joint_id'],
-            'location_id'=> $data['location_id'],
-            'schedule_id'=> $data['schedule_id'],
-            'owner_id'=> $data['owner_id'],
+            'joint_id'=> $data['joint'],
+            'location_id'=> $data['location'],
+            'schedule_id'=> $data['schedule'],
             'image'=> $data['image']
 
         ]);
@@ -89,26 +86,24 @@ class ReviewController extends Controller
 public function update(Request $request) {
 
 
-    $data >$request->validate([
+    $data = $request->validate([
 
         'id'=> 'required|inteher|min:1',
         'joint_id'=> 'required|min:3,max:20',
         'location_id'=> 'required|min:3,max:20',
         'schedule_id'=> 'required|min:3,max:20',
-        'owner_id'=> 'required|min:3,max:20',
         'image'=> 'required|min:3,max:20'
 
     ]);
     $review = Review::where('id', '=', $data['id'])->first();
 
-    $review->joint_id = $data['joint_id'];
-    $review->location_id = $data['location_id'];
-    $review->schedule_id = $data['schedule_id'];
-    $review->owner_id = $data['owner_id'];
+    $review->joint = $data['joint_id'];
+    $review->location = $data['location_id'];
+    $review->schedule = $data['schedule_id'];
     $review->image = $data['image'];
 
     
-    if ($review->save()) {
+    if ($review->update()) {
         $object = [
 
             "response" => 'Succes.Item updated successfully.',

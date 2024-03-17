@@ -14,7 +14,7 @@ class AuthController extends Controller
             'password' => 'required'
 
         ]);
-        if (!auth()->attemp($loginData))
+        if (!auth()->attempt($loginData))
         {
             return response ([
                 'response' => 'Invalid Credentials',

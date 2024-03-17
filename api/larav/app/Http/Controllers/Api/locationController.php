@@ -66,7 +66,7 @@ class LocationController extends Controller
                     $object = [
         
                         "response" => 'Succes.Item saved correctly.',
-                        "data" => $joint
+                        "data" => $location
             
                     ];
             
@@ -84,10 +84,10 @@ class LocationController extends Controller
             public function update(Request $request) {
 
 
-                $data >$request->validate([
+                $data = $request->validate([
 
-                    'id'=> 'required|inteher|min:1',
-                    'neighborhood'=> 'required|inteher|min:1',
+                    'id'=> 'required|integer|min:1',
+                    'neighborhood'=> 'required|min:3,max:20',
                     'street'=> 'required|min:3,max:20',
                     'postal'=> 'required|min:3,max:20',
                     'image'=> 'required|min:3,max:20'
