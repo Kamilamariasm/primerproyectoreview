@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LoginController;
 
 
 /*
@@ -35,6 +36,7 @@ Route::get('/reviews',[ReviewController::class,'index'])->name('Reviews.Reviews'
 Route::get('/schedules',[ScheduleController::class,'index'])->name('Schedules.Schedules');
 Route::get('/users',[UserController::class,'index'])->name('Users.Users');
 Route::get('/comments',[CommentController::class,'index'])->name('Comments.Comments');
+Route::get('/login',[LoginController::class,'index'])->name('login');
 
 
 

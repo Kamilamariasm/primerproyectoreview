@@ -50,7 +50,7 @@
                   <a class="nav-link" href="admin">Admin<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="about.html">  </a>
+                <a class="nav-link" href="login">Inicia sesión<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="product.html">  </a>
@@ -90,7 +90,7 @@
          
         </h1>
         <h3>
-          A        s        t        r        e
+          S    O    N    O    R    A
           </h2>
       </div>
       

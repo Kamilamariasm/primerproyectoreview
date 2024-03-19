@@ -65,3 +65,13 @@ Route::get('/comments/{id}',[CommentController::class, 'item']);
 Route::post('/comments/create',[CommentController::class, 'create']);
 Route::post('/comments/{id}/update',[CommentController::class, 'update']);
 
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/profile', [UserController::class, 'showProfile']);
+    Route::post('/profile/update', [UserController::class, 'updateProfile']);
+});
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+Route::get('/user/{id}/name', [UserController::class, 'fetchUserName']);
