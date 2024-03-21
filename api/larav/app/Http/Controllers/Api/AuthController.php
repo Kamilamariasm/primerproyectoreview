@@ -1,39 +1,39 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $loginData = $request ->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-
-        ]);
-        if (!auth()->attempt($loginData))
-        {
-            return response ([
-                'response' => 'Invalid Credentials',
-                'message' => 'error'
+        try {
+            $credentials = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
             ]);
-        }
-        $user = auth()->user();
 
-        $accessToken = auth()->user()->createToken('authToken')->accessToken;
-        return response([
-            'profile' => auth()->user(),
-            'access_token' => $accessToken,
+            if (!Auth::attempt($credentials)) {
+                return response()->json(['message' => 'Invalid credentials'], 401);
+            }
+
+            $user = Auth::user();
+
+            return response()->json([
+                'user_id' => $user->id,
+                'access_token' => $user->createToken('authToken')->plainTextToken,
+                'message' => 'Login successful',
+            ]);
+        } catch (\Exception $e) {
+            // Registra el error para su posterior depuración
+            \Log::error('Error al iniciar sesión: ' . $e->getMessage());
             
-            'name' => $user->name,
-            'email' => $user->email,
-            'phone' => $user->phone,
-            'image' => $user->image,
-            'message' => 'success'
-        ]);
+            // Devuelve un mensaje de error genérico para evitar revelar información sensible
+            return response()->json(['message' => 'Internal server error'], 500);
+        }
     }
-    
 }

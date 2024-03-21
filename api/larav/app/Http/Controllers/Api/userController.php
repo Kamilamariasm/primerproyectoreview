@@ -12,7 +12,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
-{
+{       
+    
+    public function getUserId(Request $request)
+    {
+        // Obtener el ID del usuario autenticado
+        $userId = Auth::id();
+
+        // Verificar si se encontró el ID del usuario
+        if ($userId) {
+            return response()->json(['user_id' => $userId]);
+        } else {
+            return response()->json(['error' => 'ID de usuario no encontrado'], 404);
+        }
+    }
+    
     public function list()
     {
         $users = User::all();
@@ -176,6 +190,8 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -238,22 +254,23 @@ class UserController extends Controller
         }
         
     }
-    use App\Models\User; // Asegúrate de importar el modelo de usuario si no lo has hecho ya
 
     
         // Otros métodos del controlador...
     
-        public function fetchUserName($userId) {
-            // Aquí puedes usar el $userId para buscar el nombre del usuario en tu base de datos o en cualquier otra fuente de datos
-            $user = User::find($userId); // Suponiendo que estás utilizando Eloquent para interactuar con la base de datos
-    
+        public function fetchUser($userId) {
+            // Buscar el usuario en la base de datos
+            $user = User::find($userId);
+        
             // Verificar si se encontró el usuario
             if ($user) {
-                $name = $user->name; // Obtener el nombre del usuario
-                return response()->json(['name' => $name]);
+                // Devolver los datos del usuario
+                return response()->json($user);
             } else {
                 // Manejar el caso en que no se encuentre el usuario
                 return response()->json(['error' => 'Usuario no encontrado'], 404);
             }
         }
+        
+        
 }    
