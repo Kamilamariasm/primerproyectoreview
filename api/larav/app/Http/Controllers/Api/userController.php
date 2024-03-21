@@ -118,7 +118,6 @@ class UserController extends Controller
             ], 500);
         }
     }
-
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -128,7 +127,7 @@ class UserController extends Controller
             'email' => 'required|email',
             'phone' => 'required|min:3|max:20',
             'password' => 'required|min:3|max:20',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // La imagen es opcional
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // La imagen es opcional
         ]);
     
         if ($validator->fails()) {
@@ -149,11 +148,25 @@ class UserController extends Controller
             ], 404);
         }
     
-        $user->name = $request->name;
-        $user->surname = $request->surname;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->password = Hash::make($request->password);
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+    
+        if ($request->has('surname')) {
+            $user->surname = $request->surname;
+        }
+    
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+    
+        if ($request->has('phone')) {
+            $user->phone = $request->phone;
+        }
+    
+        if ($request->has('password')) {
+            $user->password = Hash::make($request->password);
+        }
     
         if ($request->has('image')) {
             // Verificar si el directorio de imágenes de usuarios existe y crearlo si no existe
@@ -190,29 +203,28 @@ class UserController extends Controller
             ], 500);
         }
     }
+    
 
     
     public function updateProfile(Request $request)
     {
+        // Obtener el usuario autenticado
         $user = Auth::user();
     
+        // Verificar si se encontró el usuario autenticado
         if ($user) {
-            // Agrega un mensaje de registro para verificar si el usuario está siendo encontrado correctamente
-            Log::info('Usuario encontrado: ' . $user);
-    
+            // Validar los datos de entrada proporcionados en la solicitud
             $validator = Validator::make($request->all(), [
                 'name' => 'required|min:3|max:20',
                 'surname' => 'required|min:3|max:20',
-                'email' => 'required|email|unique:users,email,'.$user->id,
+                'email' => 'required|email|unique:users,email,' . $user->id,
                 'phone' => 'required|min:3|max:20',
-                'password' => 'nullable|min:3|max:20',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Ajusta las reglas de validación según tus necesidades
+                'password' => 'required|min:3|max:20',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
     
+            // Verificar si la validación falla
             if ($validator->fails()) {
-                // Agrega un mensaje de registro para verificar los errores de validación
-                Log::error('Errores de validación: ' . $validator->errors());
-    
                 return response()->json([
                     'success' => false,
                     'message' => 'Error en la validación de los datos',
@@ -220,40 +232,40 @@ class UserController extends Controller
                 ], 422);
             }
     
-            // Agrega un mensaje de registro para verificar los datos recibidos en la solicitud
-            Log::info('Datos de solicitud recibidos: ' . $request->all());
+            // Actualizar los campos del perfil del usuario
+            $user->name = $request->name;
+            $user->surname = $request->surname;
+            $user->email = $request->email;
+            $user->phone = $request->phone;
     
-            $user->fill($request->except(['password', 'image']));
-    
+            // Verificar si se proporcionó una nueva contraseña
             if ($request->has('password')) {
                 $user->password = Hash::make($request->password);
             }
     
+            // Verificar si se proporcionó una nueva imagen de perfil
             if ($request->hasFile('image')) {
-                // ... Código para procesar y guardar la imagen
+                // Procesar y guardar la nueva imagen de perfil (tú debes implementar esta lógica)
             }
     
+            // Guardar los cambios en el perfil del usuario
             $user->save();
     
-            // Agrega un mensaje de registro para verificar si el usuario se ha guardado correctamente
-            Log::info('Usuario actualizado correctamente: ' . $user);
-    
+            // Devolver una respuesta JSON indicando que la actualización se realizó con éxito
             return response()->json([
                 'success' => true,
                 'message' => 'Perfil actualizado correctamente',
-                'data' => $user
+                'data' => $user,
             ]);
         } else {
-            // Agrega un mensaje de registro si el usuario no se encuentra
-            Log::error('Usuario no encontrado');
-    
+            // Devolver una respuesta JSON indicando que el usuario no se encontró
             return response()->json([
                 'success' => false,
-                'message' => 'Usuario no encontrado'
+                'message' => 'Usuario no encontrado',
             ], 404);
         }
-        
     }
+    
 
     
         // Otros métodos del controlador...

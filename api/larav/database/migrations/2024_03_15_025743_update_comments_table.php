@@ -13,13 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-         Schema::table('comments', function (Blueprint $table) {
-            // Cambiar el tipo de datos de la columna 'user_id' a 'integer'
-            $table->integer('user_id')->change();
-            
-            // Cambiar el tipo de datos de la columna 'review_id' a 'integer'
-            $table->integer('review_id')->change();
-        });
+ 
     }
 
     /**

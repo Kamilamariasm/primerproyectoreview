@@ -13,11 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-        
-            $table->after('status')->default(1)->after('password');
-            $table->integer('level_id')->default(1)->after('status');
-        });
+       
     }
 
     /**
@@ -27,10 +23,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-        
-            $table->dropColumn('status');
-            $table->dropColumn('level_id');
-        });
+      
     }
 };
