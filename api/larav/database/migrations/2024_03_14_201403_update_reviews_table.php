@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('reviews', function (Blueprint $table) {
             // Eliminar la columna 'owners_id'
-            $table->dropColumn('owner_id');
+            $table->dropColumn('owners_id');
         });
     }
 
@@ -28,7 +28,7 @@ return new class extends Migration
     {
         Schema::table('reviews', function (Blueprint $table) {
             // Agregar la columna 'owners_id' con el mismo tipo de datos que tenía antes
-            $table->integer('owner_id');
+            $table->integer('owners_id');
         });
     }
 };

@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->integer('review_id')->default(1)->after('user_id');
+            $table->integer('review_id')->default(1);
+            $table->integer('user_id')->default(1);
         });
     }
 
@@ -28,6 +29,8 @@ return new class extends Migration
     {
         Schema::table('comments', function (Blueprint $table) {
             $table->dropColumn('review_id');
+            $table->dropColumn('user_id');
+
 
         });
     }

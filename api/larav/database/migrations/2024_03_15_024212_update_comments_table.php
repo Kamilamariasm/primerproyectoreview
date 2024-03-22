@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('comments', function (Blueprint $table) {
-
-            DB::statement('ALTER TABLE comments MODIFY COLUMN user_id INT;');
-            DB::statement('ALTER TABLE comments MODIFY COLUMN review_id INT;');
-        });
+   
+        
 
     }
 
